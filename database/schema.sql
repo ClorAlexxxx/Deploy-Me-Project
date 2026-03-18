@@ -44,6 +44,7 @@ id_medico INTEGER REFERENCES medicos(id_medico),
 
 motivo_consulta TEXT,
 fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+hora TIME DEFAULT CURRENT_TIME,
 
 antecedentes_heredofamiliares TEXT,
 antecedentes_personales TEXT,
@@ -69,9 +70,13 @@ CREATE TABLE notas_evolucion(
 id_nota SERIAL PRIMARY KEY,
 id_consulta INTEGER REFERENCES consultas(id_consulta),
 fecha DATE,
+hora TIME DEFAULT CURRENT_TIME,
+resumen_interrogatorio TEXT,
 evolucion TEXT,
 signos_vitales TEXT,
+resultados_estudios TEXT,
 diagnostico TEXT,
+pronostico TEXT,
 tratamiento TEXT
 
 );
@@ -79,6 +84,15 @@ tratamiento TEXT
 CREATE TABLE cie10 (
 codigo VARCHAR(10) PRIMARY KEY,
 descripcion TEXT NOT NULL
+);
+
+CREATE TABLE consentimientos (
+id SERIAL PRIMARY KEY,
+id_paciente INTEGER REFERENCES pacientes(id_paciente),
+descripcion TEXT,
+fecha DATE,
+firma_paciente TEXT,
+firma_medico TEXT
 );
 
 CREATE TABLE auditoria (
