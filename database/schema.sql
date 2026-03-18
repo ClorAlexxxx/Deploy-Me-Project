@@ -11,7 +11,7 @@ id_usuario SERIAL PRIMARY KEY,
 nombre VARCHAR(100) NOT NULL,
 email VARCHAR(100) UNIQUE NOT NULL,
 password_hash TEXT NOT NULL,
-rol VARCHAR(50) NOT NULL -- admin, medico, enfermero
+rol VARCHAR(50) CHECK (rol IN ('admin','medico','enfermero'))
 );
 
 CREATE TABLE medicos(
@@ -48,7 +48,6 @@ id_paciente INTEGER NOT NULL REFERENCES pacientes(id_paciente),
 id_medico INTEGER NOT NULL REFERENCES medicos(id_medico),
 
 fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-hora TIME DEFAULT CURRENT_TIME,
 
 motivo_consulta TEXT,
 padecimiento_actual TEXT,
@@ -70,17 +69,16 @@ codigo_cie10 VARCHAR(10) REFERENCES cie10(codigo),
 pronostico TEXT,
 plan_terapeutico TEXT,
 
-firma_medico TEXT NOT NULL
+firma_medico TEXT NOT NULL DEFAULT 'pendiente',
 
-
+transcripcion_cruda TEXT
 );
 
 CREATE TABLE notas_evolucion(
 
 id_nota SERIAL PRIMARY KEY,
 id_consulta INTEGER NOT NULL REFERENCES consultas(id_consulta),
-fecha DATE,
-hora TIME DEFAULT CURRENT_TIME,
+fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 resumen_interrogatorio TEXT,
 evolucion TEXT,
 signos_vitales TEXT,
@@ -89,7 +87,9 @@ diagnostico TEXT,
 pronostico TEXT,
 tratamiento TEXT,
 
-firma_medico TEXT NOT NULL
+firma_medico TEXT NOT NULL DEFAULT 'pendiente',
+
+transcripcion_cruda TEXT
 );
 
 CREATE TABLE consentimientos (
@@ -97,8 +97,8 @@ id SERIAL PRIMARY KEY,
 id_paciente INTEGER NOT NULL REFERENCES pacientes(id_paciente),
 descripcion TEXT,
 fecha DATE,
-firma_paciente TEXT NOT NULL,
-firma_medico TEXT NOT NULL
+firma_paciente TEXT NOT NULL DEFAULT 'pendiente',
+firma_medico TEXT NOT NULL DEFAULT 'pendiente'
 );
 
 CREATE TABLE auditoria (
